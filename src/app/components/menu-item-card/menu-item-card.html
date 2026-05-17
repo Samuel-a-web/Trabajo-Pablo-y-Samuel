@@ -1,0 +1,19 @@
+<article class="mic-card" [attr.data-item-id]="item().id">
+  <div class="mic-body">
+    <div class="mic-info">
+      <h4 class="mic-name">{{ item().name }}</h4>
+      <p class="mic-description">{{ item().description }}</p>
+    </div>
+    <div class="mic-footer">
+      <span class="mic-price">{{ item().price }}</span>
+      <button
+        class="mic-add-btn"
+        (click)="cartService.addToCart(item())"
+        [attr.aria-label]="'Añadir ' + item().name + ' al carrito'"
+        title="Añadir al ticket"
+      >
+        <i class="bi bi-plus-lg"></i>
+      </button>
+    </div>
+  </div>
+</article>

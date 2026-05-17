@@ -72,7 +72,7 @@
               @for (item of cartService.cartItems(); track item.id) {
                 <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary pe-2">
                   <div class="d-flex flex-column">
-                    <h6 class="text-white mb-0">{{ item.nombre }}</h6>
+                    <h6 class="text-white mb-0">{{ item.name }}</h6>
                     <div class="d-flex align-items-center mt-2 gap-2">
                       <button class="btn btn-sm btn-dark border-secondary rounded-circle" style="width: 28px; height: 28px; padding: 0;" (click)="cartService.removeFromCart(item.id)"><i class="bi bi-dash"></i></button>
                       <span class="text-white-50 fw-bold">{{ item.quantity }}x</span>
@@ -83,7 +83,7 @@
                     <button class="btn btn-link text-danger p-0 text-decoration-none mb-1 d-block w-100 text-end" (click)="cartService.removeFromCart(item.id, true)">
                       <i class="bi bi-trash"></i>
                     </button>
-                    <span class="text-warning fw-bold">{{ item.precio }}</span>
+                    <span class="text-warning fw-bold">{{ item.price }}</span>
                   </div>
                 </div>
               }

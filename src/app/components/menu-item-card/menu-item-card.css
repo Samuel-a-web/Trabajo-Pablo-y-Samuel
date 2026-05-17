@@ -1,0 +1,92 @@
+/* ─── MENU ITEM CARD ─────────────────────────────────────────────── */
+
+.mic-card {
+  background: linear-gradient(155deg, rgba(43, 28, 22, 0.82), rgba(25, 16, 12, 0.72));
+  border: 2px solid rgba(43, 28, 22, 0.82);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mic-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+  border-color: rgba(253, 216, 53, 0.35);
+}
+
+.mic-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  gap: 0.85rem;
+}
+
+.mic-info {
+  flex: 1;
+}
+
+.mic-name {
+  font-family: var(--font-heading, 'Luckiest Guy', cursive);
+  font-size: 0.95rem;
+  color: #fff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+  margin: 0 0 0.45rem;
+  line-height: 1.25;
+}
+
+.mic-description {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.58);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.mic-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(43, 28, 22, 0.58);
+}
+
+.mic-price {
+  font-family: var(--font-heading, 'Luckiest Guy', cursive);
+  font-size: 1.1rem;
+  color: var(--krusty-yellow, #fdd835);
+  text-shadow: 2px 2px 0 rgba(183, 28, 28, 0.6);
+  white-space: nowrap;
+}
+
+.mic-add-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--krusty-yellow, #fdd835);
+  background: transparent;
+  color: var(--krusty-yellow, #fdd835);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.mic-add-btn:hover {
+  background: var(--krusty-yellow, #fdd835);
+  color: #1a0a00;
+  transform: scale(1.12);
+}
+
+.mic-add-btn:active {
+  transform: scale(0.95);
+}

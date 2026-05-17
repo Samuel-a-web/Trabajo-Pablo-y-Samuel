@@ -1,32 +1,31 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { Item, CartItem } from '../models/item';
+import { MenuItem } from '../commons/menu.interface';
+import { CartItem } from '../commons/cart.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CartService {
-  // We use a Signal to hold the state
+  // Signal que contiene el estado del carrito
   readonly cartItems = signal<CartItem[]>([]);
 
-  // Computed signal for total number of items
-  readonly totalItemsCount = computed(() => {
-    return this.cartItems().reduce((total, item) => total + item.quantity, 0);
-  });
+  // Número total de artículos en el carrito
+  readonly totalItemsCount = computed(() =>
+    this.cartItems().reduce((total, item) => total + item.quantity, 0)
+  );
 
-  // Computed signal for the total price mathematically
-  readonly cartTotalNumber = computed(() => {
-    return this.cartItems().reduce((total, item) => {
-      return total + (this.parsePrice(item.precio) * item.quantity);
-    }, 0);
-  });
+  // Precio total numérico
+  readonly cartTotalNumber = computed(() =>
+    this.cartItems().reduce((total, item) => {
+      return total + (this.parsePrice(item.price) * item.quantity);
+    }, 0)
+  );
 
-  // Computed signal to format the total back to currency
-  readonly cartTotalFormatted = computed(() => {
-    return this.cartTotalNumber().toFixed(2).replace('.', ',') + ' €';
-  });
+  // Precio total formateado como moneda
+  readonly cartTotalFormatted = computed(() =>
+    this.cartTotalNumber().toFixed(2).replace('.', ',') + ' €'
+  );
 
-  // Add an item to the cart, or increment quantity if it exists
-  addToCart(item: Item): void {
+  // Añadir artículo o incrementar cantidad si ya existe
+  addToCart(item: MenuItem): void {
     this.cartItems.update(items => {
       const existing = items.find(i => i.id === item.id);
       if (existing) {
@@ -36,18 +35,16 @@ export class CartService {
     });
   }
 
-  // Remove an item entirely or decrease quantity
+  // Reducir cantidad o eliminar completamente del carrito
   removeFromCart(itemId: string, completely: boolean = false): void {
     this.cartItems.update(items => {
       if (completely) {
         return items.filter(i => i.id !== itemId);
       }
-      
       const existing = items.find(i => i.id === itemId);
       if (existing && existing.quantity > 1) {
         return items.map(i => i.id === itemId ? { ...i, quantity: i.quantity - 1 } : i);
       }
-      
       return items.filter(i => i.id !== itemId);
     });
   }
@@ -56,10 +53,10 @@ export class CartService {
     this.cartItems.set([]);
   }
 
-  // Parses '7,90 €' into 7.90
-  private parsePrice(precio: string): number {
-    if (!precio) return 0;
-    const cleanStr = precio.replace('€', '').replace(',', '.').trim();
+  // Convierte '7,90 €' en 7.90
+  private parsePrice(price: string): number {
+    if (!price) return 0;
+    const cleanStr = price.replace('€', '').replace(',', '.').trim();
     const num = parseFloat(cleanStr);
     return isNaN(num) ? 0 : num;
   }

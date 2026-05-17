@@ -21,7 +21,7 @@
           </h3>
           <div data-section="schedule">
             <ul class="list-unstyled text-white mb-0 text-start schedule-list">
-              @for (item of schedule; track item.day) {
+              @for (item of schedule(); track item.day) {
                 <li class="mb-2 d-flex justify-content-between align-items-center"
                   data-bs-toggle="tooltip" data-bs-placement="top"
                   [attr.data-bs-title]="item.tooltip">
@@ -45,7 +45,7 @@
         <p class="text-white-50">Haz click en cada personaje para conocerlo mejor</p>
       </div>
 
-      @for (member of crew; track member.id) {
+      @for (member of crew(); track member.id) {
         <div class="col-md-4 mb-4">
           <div class="card crew-card h-100" role="button"
             data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + member.id"
@@ -68,7 +68,7 @@
 </section>
 
 <!-- Modales Bootstrap para cada miembro de la tripulación -->
-@for (member of crew; track member.id) {
+@for (member of crew(); track member.id) {
   <div class="modal fade" [id]="'modal-' + member.id" tabindex="-1"
     [attr.aria-labelledby]="'modalLabel-' + member.id" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

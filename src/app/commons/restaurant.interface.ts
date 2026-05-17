@@ -13,6 +13,11 @@ export interface ScheduleItem {
   readonly tooltip: string;
 }
 
+export interface RestaurantData {
+  readonly crew: readonly CrewMember[];
+  readonly schedule: readonly ScheduleItem[];
+}
+
 export interface User {
   id: string;
   username: string;

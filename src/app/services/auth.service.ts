@@ -1,16 +1,14 @@
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { User, LoginCredentials, RegisterCredentials } from '../models/restaurant.models';
+import { User, LoginCredentials, RegisterCredentials } from '../commons/restaurant.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private platformId = inject(PLATFORM_ID);
-  
-  // State
+
+  // Estado del usuario actual
   readonly currentUser = signal<User | null>(null);
-  
+
   private readonly USERS_KEY = 'krusty_users';
   private readonly SESSION_KEY = 'krusty_current_user';
 
@@ -45,39 +43,30 @@ export class AuthService {
 
   register(credentials: RegisterCredentials): { success: boolean; error?: string } {
     const users = this.getUsers();
-    
-    // Check if user already exists
     if (users.some(u => u.username.toLowerCase() === credentials.username.toLowerCase())) {
       return { success: false, error: 'El nombre de usuario ya está en uso' };
     }
-
     const newUser: User = {
       id: Date.now().toString(),
       username: credentials.username,
-      // In a real app we would hash this, but we are simulating
-      password: credentials.password 
+      password: credentials.password
     };
-
     users.push(newUser);
     this.saveUsers(users);
-    
-    // Auto login after register
     this.setSession(newUser);
     return { success: true };
   }
 
   login(credentials: LoginCredentials): { success: boolean; error?: string } {
     const users = this.getUsers();
-    const user = users.find(u => 
-      u.username.toLowerCase() === credentials.username.toLowerCase() && 
+    const user = users.find(u =>
+      u.username.toLowerCase() === credentials.username.toLowerCase() &&
       u.password === credentials.password
     );
-
     if (user) {
       this.setSession(user);
       return { success: true };
     }
-
     return { success: false, error: 'Usuario o contraseña incorrectos' };
   }
 

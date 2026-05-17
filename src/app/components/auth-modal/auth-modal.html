@@ -2,56 +2,84 @@
 <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content auth-modal-content">
-      <div class="modal-header border-0 pb-0">
-        <h5 class="modal-title display-6 text-warning" id="authModalLabel">
-          <i class="bi bi-person-badge me-2"></i>
-          {{ isLoginMode() ? 'Iniciar Sesión' : 'Registrarse' }}
+
+      <!-- Header limpio con logo/icono -->
+      <div class="auth-modal-header">
+        <div class="auth-logo-circle" aria-hidden="true">
+          <i class="bi bi-person-badge-fill"></i>
+        </div>
+        <h5 class="auth-modal-title" id="authModalLabel">
+          {{ isLoginMode() ? 'Iniciar Sesión' : 'Crear Cuenta' }}
         </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <p class="auth-modal-subtitle">
+          {{ isLoginMode() ? 'Accede al Crustáceo Crujiente' : 'Únete a la tripulación del Crustáceo' }}
+        </p>
+        <button type="button" class="auth-close-btn" data-bs-dismiss="modal" aria-label="Cerrar">
+          <i class="bi bi-x-lg"></i>
+        </button>
       </div>
-      
-      <div class="modal-body p-4">
+
+      <div class="auth-modal-body">
+
+        <!-- Mensaje de error -->
         @if (errorMessage()) {
-          <div class="alert alert-danger py-2 border-0 bg-danger bg-opacity-25 text-white" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
+          <div class="auth-error-msg" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
             {{ errorMessage() }}
           </div>
         }
 
+        <!-- Formulario -->
         <form (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label for="username" class="form-label text-white-50">Usuario Submarino</label>
-            <div class="input-group auth-input-group">
-              <span class="input-group-text border-0 bg-transparent text-warning"><i class="bi bi-person-fill"></i></span>
-              <input type="text" class="form-control border-0 text-white" id="username" 
-                [ngModel]="username()" (ngModelChange)="username.set($event)" name="username" 
-                placeholder="Ej. BobEsponja" required autocomplete="username">
-            </div>
+          <div class="auth-field">
+            <label for="username" class="auth-label">
+              <i class="bi bi-person-fill me-1"></i>Usuario
+            </label>
+            <input
+              type="text"
+              class="auth-input"
+              id="username"
+              [ngModel]="username()"
+              (ngModelChange)="username.set($event)"
+              name="username"
+              placeholder="Ej. BobEsponja"
+              required
+              autocomplete="username"
+            >
           </div>
 
-          <div class="mb-4">
-            <label for="password" class="form-label text-white-50">Contraseña Secreta</label>
-            <div class="input-group auth-input-group">
-              <span class="input-group-text border-0 bg-transparent text-warning"><i class="bi bi-lock-fill"></i></span>
-              <input type="password" class="form-control border-0 text-white" id="password" 
-                [ngModel]="password()" (ngModelChange)="password.set($event)" name="password" 
-                placeholder="FórmulaSecreta123" required autocomplete="current-password">
-            </div>
+          <div class="auth-field">
+            <label for="password" class="auth-label">
+              <i class="bi bi-lock-fill me-1"></i>Contraseña
+            </label>
+            <input
+              type="password"
+              class="auth-input"
+              id="password"
+              [ngModel]="password()"
+              (ngModelChange)="password.set($event)"
+              name="password"
+              placeholder="FórmulaSecreta123"
+              required
+              autocomplete="current-password"
+            >
           </div>
 
-          <button type="submit" class="btn btn-warning w-100 py-2 fw-bold fs-5 shadow-sm">
-            {{ isLoginMode() ? 'ENTRAR AL CRUSTÁCEO' : 'CREAR IDENTIFICACIÓN' }}
+          <button type="submit" class="auth-submit-btn">
+            {{ isLoginMode() ? '🦀 Entrar al Crustáceo' : '✅ Crear Identificación' }}
           </button>
         </form>
 
-        <div class="text-center mt-4">
-          <p class="text-white-50 mb-0">
-            {{ isLoginMode() ? '¿No tienes identificación oficial?' : '¿Ya tienes una identificación?' }}
-          </p>
-          <button type="button" class="btn btn-link text-warning p-0 text-decoration-none fw-bold" (click)="toggleMode()">
-            {{ isLoginMode() ? 'Regístrate aquí' : 'Inicia sesión aquí' }}
+        <!-- Cambiar modo -->
+        <div class="auth-toggle">
+          <span class="auth-toggle-text">
+            {{ isLoginMode() ? '¿Sin cuenta aún?' : '¿Ya tienes cuenta?' }}
+          </span>
+          <button type="button" class="auth-toggle-btn" (click)="toggleMode()">
+            {{ isLoginMode() ? 'Regístrate aquí' : 'Inicia sesión' }}
           </button>
         </div>
+
       </div>
     </div>
   </div>

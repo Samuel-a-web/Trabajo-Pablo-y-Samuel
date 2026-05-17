@@ -9,12 +9,16 @@ import { RestaurantService } from '../../services/restaurant.service';
 export class AboutPageComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly restaurantService = inject(RestaurantService);
-  readonly crew = this.restaurantService.getCrew();
-  readonly schedule = this.restaurantService.getSchedule();
+
+  // Signals reactivos: se actualizan cuando el JSON carga
+  readonly crew = this.restaurantService.crew;
+  readonly schedule = this.restaurantService.schedule;
+  readonly isLoading = this.restaurantService.isLoading;
 
   constructor() {
     afterNextRender(() => {
-      this.initTooltips();
+      // Espera a que los datos del JSON carguen antes de inicializar los tooltips
+      setTimeout(() => this.initTooltips(), 800);
     });
   }
 
@@ -28,3 +32,4 @@ export class AboutPageComponent {
     });
   }
 }
+

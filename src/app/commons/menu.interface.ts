@@ -3,6 +3,7 @@ export interface MenuItem {
   readonly name: string;
   readonly description: string;
   readonly price: string;
+  readonly image?: string;
 }
 
 export interface MenuCategory {
@@ -12,3 +13,6 @@ export interface MenuCategory {
   readonly items: readonly MenuItem[];
 }
 
+export interface MenuData {
+  readonly categories: readonly MenuCategory[];
+}
