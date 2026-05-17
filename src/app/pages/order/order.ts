@@ -27,10 +27,10 @@ export class OrderPageComponent {
       this.formData.nombre &&
       this.formData.telefono &&
       this.formData.direccion &&
-      this.cartService.totalUnidades() > 0
+      this.cartService.totalItemsCount() > 0
     ) {
       this.pedidoConfirmado = true;
-      this.cartService.vaciarCarrito();
+      this.cartService.clearCart();
       
       if (isPlatformBrowser(this.platformId)) {
         window.scrollTo({ top: 0, behavior: 'smooth' });

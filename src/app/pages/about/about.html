@@ -21,12 +21,13 @@
           </h3>
           <div data-section="horario">
             <ul class="list-unstyled text-white mb-0 text-start schedule-list">
+              @for (item of restaurantService.schedule(); track item.day) {
                 <li class="mb-2 d-flex justify-content-between align-items-center"
                   data-bs-toggle="tooltip" data-bs-placement="top"
                   [attr.data-bs-title]="item.tooltip">
-                  <strong>{{ item.dia }}:</strong>
+                  <strong>{{ item.day }}:</strong>
                   <span class="badge bg-dark bg-opacity-50 px-3 py-2">
-                    <i class="bi bi-clock me-1"></i>{{ item.horas }}
+                    <i class="bi bi-clock me-1"></i>{{ item.hours }}
                   </span>
                 </li>
               }
@@ -44,6 +45,7 @@
         <p class="text-white-50">Haz click en cada personaje para conocerlo mejor</p>
       </div>
 
+      @for (miembro of restaurantService.crew(); track miembro.id) {
         <div class="col-md-4 mb-4">
           <div class="card crew-card h-100" role="button"
             data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + miembro.id"
@@ -52,8 +54,8 @@
               {{ miembro.emoji }}
             </div>
             <div class="card-body text-start">
-              <h3 class="text-warning crew-name">{{ miembro.nombre }}</h3>
-              <p class="text-white-50 mb-1">{{ miembro.descripcion }}</p>
+              <h3 class="text-warning crew-name">{{ miembro.name }}</h3>
+              <p class="text-white-50 mb-1">{{ miembro.description }}</p>
               <small class="text-muted d-block mt-2">
                 <i class="bi bi-hand-index me-1"></i>Click para más detalles
               </small>
@@ -65,11 +67,13 @@
   </div>
 </section>
 
-    <div class="modal-dialog modal-dialog-centered">
+  @for (miembro of restaurantService.crew(); track miembro.id) {
+    <div class="modal fade crew-modal" [id]="'modal-' + miembro.id" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content crew-modal-content">
         <div class="modal-header border-0">
           <h4 class="modal-title text-warning" [id]="'modalLabel-' + miembro.id">
-            {{ miembro.emoji }} {{ miembro.nombre }}
+            {{ miembro.emoji }} {{ miembro.name }}
           </h4>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
             aria-label="Cerrar"></button>
@@ -79,10 +83,10 @@
             <span class="display-1">{{ miembro.emoji }}</span>
           </div>
           <h5 class="text-warning mb-2">
-            <i class="bi bi-briefcase me-1"></i>{{ miembro.rol }}
+            <i class="bi bi-briefcase me-1"></i>{{ miembro.role }}
           </h5>
-          <p class="text-white-50">{{ miembro.descripcion }}</p>
-          <p class="text-white-50 mb-0">{{ miembro.curiosidad }}</p>
+          <p class="text-white-50">{{ miembro.description }}</p>
+          <p class="text-white-50 mb-0">{{ miembro.funFact }}</p>
         </div>
         <div class="modal-footer border-0">
           <button type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal">

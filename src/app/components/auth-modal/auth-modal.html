@@ -2,17 +2,33 @@
 <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content auth-modal-content">
-
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-warning" id="authModalLabel">{{ modoLogin() ? 'INICIAR SESIÓN' : 'REGISTRARSE' }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        @if (mensajeError()) {
+          <div class="alert alert-danger bg-danger bg-opacity-25 border-0 text-white mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>{{ mensajeError() }}
           </div>
         }
-
-        <!-- Formulario -->
         <form (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label class="form-label text-white-50">Usuario</label>
+            <input type="text" class="form-control bg-dark border-secondary text-white" name="username" [(ngModel)]="nombreUsuario" required>
+          </div>
+          <div class="mb-4">
+            <label class="form-label text-white-50">Contraseña</label>
+            <input type="password" class="form-control bg-dark border-secondary text-white" name="password" [(ngModel)]="contrasena" required>
+          </div>
+          <button type="submit" class="btn btn-warning w-100 fw-bold">{{ modoLogin() ? 'Entrar' : 'Crear Cuenta' }}</button>
+        </form>
+        <div class="mt-3 text-center">
+          <button type="button" class="btn btn-link text-white-50 text-decoration-none" (click)="toggleModo()">
+            {{ modoLogin() ? '¿No tienes cuenta? Regístrate aquí' : '¿Ya tienes cuenta? Inicia sesión' }}
           </button>
         </div>
-
       </div>
-
     </div>
   </div>
 </div>

@@ -42,12 +42,12 @@
               <div class="burger-card-icon">🍔</div>
 
               <div class="burger-card-body">
-                <h3 class="burger-card-nombre">{{ burger.nombre }}</h3>
-                <p class="burger-card-descripcion">{{ burger.descripcion }}</p>
+                <h3 class="burger-card-nombre">{{ burger.name }}</h3>
+                <p class="burger-card-descripcion">{{ burger.description }}</p>
               </div>
 
               <div class="burger-card-footer">
-                <span class="burger-card-precio">{{ burger.precio }}</span>
+                <span class="burger-card-precio">{{ burger.price }}</span>
                 <button
                   class="btn btn-sm btn-outline-warning rounded-pill burger-add-btn"
                   (click)="cartService.addToCart(burger)"

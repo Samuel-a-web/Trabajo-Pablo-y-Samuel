@@ -69,18 +69,18 @@ export class AuthModalComponent {
     }
 
     const credenciales = {
-      nombreUsuario: this.nombreUsuario().trim(),
-      contrasena: this.contrasena()
+      username: this.nombreUsuario().trim(),
+      password: this.contrasena()
     };
 
     let resultado;
     if (this.modoLogin()) {
       resultado = this.authService.login(credenciales);
     } else {
-      resultado = this.authService.registrar(credenciales);
+      resultado = this.authService.register(credenciales);
     }
 
-    if (resultado.exito) {
+    if (resultado.success) {
       this.hide();
       this.resetForm();
     } else {

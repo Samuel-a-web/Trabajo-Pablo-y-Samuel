@@ -53,9 +53,9 @@
             <li class="nav-item mt-4 mt-lg-0 d-flex align-items-lg-center justify-content-lg-start">
               <a routerLink="/order" class="btn sym-order-btn w-100 position-relative" style="max-width: 200px;" (click)="closeOffcanvas()">
                 PEDIR AHORA
-                @if (cartService.totalUnidades() > 0) {
+                @if (cartService.totalItemsCount() > 0) {
                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
-                    {{ cartService.totalUnidades() }}
+                    {{ cartService.totalItemsCount() }}
                   </span>
                 }
               </a>
@@ -63,11 +63,11 @@
 
             <!-- Auth User Area -->
             <li class="nav-item ms-lg-3 mt-4 mt-lg-0 d-flex align-items-center justify-content-lg-start position-relative">
-              @if (authService.usuarioActual()) {
+              @if (authService.currentUser()) {
                 <div class="dropdown">
                   <button class="btn btn-link text-warning text-decoration-none dropdown-toggle p-0 d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-person-circle fs-4"></i>
-                    <span class="d-lg-none d-xl-inline">Hola, {{ authService.usuarioActual()?.nombreUsuario }}</span>
+                    <span class="d-lg-none d-xl-inline">Hola, {{ authService.currentUser()?.username }}</span>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg mt-2" style="background: rgba(26, 10, 0, 0.95); border: 1px solid var(--krusty-red); border-radius: 12px; backdrop-filter: blur(10px);">
                     <li>
@@ -78,7 +78,7 @@
                   </ul>
                 </div>
               } @else {
-                <button class="btn btn-link text-white-50 text-decoration-none p-0 d-flex align-items-center gap-2 sym-nav-link border-0 bg-transparent" (click)="openAuthModal()">
+                <button class="btn btn-link text-white-50 text-decoration-none p-0 d-flex align-items-center gap-2 sym-nav-link border-0 bg-transparent" (click)="authModal.show()">
                   <i class="bi bi-person-circle fs-4"></i>
                   <span class="d-lg-none d-xl-inline">Ingresar</span>
                 </button>
