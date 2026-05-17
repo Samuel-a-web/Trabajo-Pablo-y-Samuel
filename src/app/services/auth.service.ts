@@ -1,97 +1,93 @@
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { User, LoginCredentials, RegisterCredentials } from '../models/restaurant.models';
+import { Usuario, CredencialesLogin, CredencialesRegistro } from '../commons/restaurant.models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private platformId = inject(PLATFORM_ID);
-  
-  // State
-  readonly currentUser = signal<User | null>(null);
-  
-  private readonly USERS_KEY = 'krusty_users';
-  private readonly SESSION_KEY = 'krusty_current_user';
+
+  // Estado
+  readonly usuarioActual = signal<Usuario | null>(null);
+
+  private readonly CLAVE_USUARIOS = 'krusty_usuarios';
+  private readonly CLAVE_SESION = 'krusty_sesion_actual';
 
   constructor() {
-    this.loadSession();
+    this.cargarSesion();
   }
 
-  private isBrowser(): boolean {
+  private esBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }
 
-  private loadSession() {
-    if (this.isBrowser()) {
-      const session = localStorage.getItem(this.SESSION_KEY);
-      if (session) {
-        this.currentUser.set(JSON.parse(session));
+  private cargarSesion() {
+    if (this.esBrowser()) {
+      const sesion = localStorage.getItem(this.CLAVE_SESION);
+      if (sesion) {
+        this.usuarioActual.set(JSON.parse(sesion));
       }
     }
   }
 
-  private getUsers(): User[] {
-    if (!this.isBrowser()) return [];
-    const users = localStorage.getItem(this.USERS_KEY);
-    return users ? JSON.parse(users) : [];
+  private getUsuarios(): Usuario[] {
+    if (!this.esBrowser()) return [];
+    const usuarios = localStorage.getItem(this.CLAVE_USUARIOS);
+    return usuarios ? JSON.parse(usuarios) : [];
   }
 
-  private saveUsers(users: User[]) {
-    if (this.isBrowser()) {
-      localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
+  private guardarUsuarios(usuarios: Usuario[]) {
+    if (this.esBrowser()) {
+      localStorage.setItem(this.CLAVE_USUARIOS, JSON.stringify(usuarios));
     }
   }
 
-  register(credentials: RegisterCredentials): { success: boolean; error?: string } {
-    const users = this.getUsers();
-    
-    // Check if user already exists
-    if (users.some(u => u.username.toLowerCase() === credentials.username.toLowerCase())) {
-      return { success: false, error: 'El nombre de usuario ya está en uso' };
+  registrar(credenciales: CredencialesRegistro): { exito: boolean; error?: string } {
+    const usuarios = this.getUsuarios();
+
+    if (usuarios.some(u => u.nombreUsuario.toLowerCase() === credenciales.nombreUsuario.toLowerCase())) {
+      return { exito: false, error: 'El nombre de usuario ya está en uso' };
     }
 
-    const newUser: User = {
+    const nuevoUsuario: Usuario = {
       id: Date.now().toString(),
-      username: credentials.username,
-      // In a real app we would hash this, but we are simulating
-      password: credentials.password 
+      nombreUsuario: credenciales.nombreUsuario,
+      contrasena: credenciales.contrasena
     };
 
-    users.push(newUser);
-    this.saveUsers(users);
-    
-    // Auto login after register
-    this.setSession(newUser);
-    return { success: true };
+    usuarios.push(nuevoUsuario);
+    this.guardarUsuarios(usuarios);
+    this.establecerSesion(nuevoUsuario);
+    return { exito: true };
   }
 
-  login(credentials: LoginCredentials): { success: boolean; error?: string } {
-    const users = this.getUsers();
-    const user = users.find(u => 
-      u.username.toLowerCase() === credentials.username.toLowerCase() && 
-      u.password === credentials.password
+  login(credenciales: CredencialesLogin): { exito: boolean; error?: string } {
+    const usuarios = this.getUsuarios();
+    const usuario = usuarios.find(u =>
+      u.nombreUsuario.toLowerCase() === credenciales.nombreUsuario.toLowerCase() &&
+      u.contrasena === credenciales.contrasena
     );
 
-    if (user) {
-      this.setSession(user);
-      return { success: true };
+    if (usuario) {
+      this.establecerSesion(usuario);
+      return { exito: true };
     }
 
-    return { success: false, error: 'Usuario o contraseña incorrectos' };
+    return { exito: false, error: 'Usuario o contraseña incorrectos' };
   }
 
   logout() {
-    this.currentUser.set(null);
-    if (this.isBrowser()) {
-      localStorage.removeItem(this.SESSION_KEY);
+    this.usuarioActual.set(null);
+    if (this.esBrowser()) {
+      localStorage.removeItem(this.CLAVE_SESION);
     }
   }
 
-  private setSession(user: User) {
-    this.currentUser.set(user);
-    if (this.isBrowser()) {
-      localStorage.setItem(this.SESSION_KEY, JSON.stringify(user));
+  private establecerSesion(usuario: Usuario) {
+    this.usuarioActual.set(usuario);
+    if (this.esBrowser()) {
+      localStorage.setItem(this.CLAVE_SESION, JSON.stringify(usuario));
     }
   }
 }

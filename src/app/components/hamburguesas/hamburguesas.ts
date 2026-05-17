@@ -2,30 +2,30 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuService } from '../../services/menu.service';
 import { CartService } from '../../services/cart.service';
-import { MenuCategoria } from '../../commons/menu.interface';
+import { MenuItem } from '../../commons/menu.interface';
 
 @Component({
-  selector: 'app-menu-page',
+  selector: 'app-hamburguesas',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './menu.html',
+  templateUrl: './hamburguesas.html',
 })
-export class MenuPageComponent implements OnInit {
+export class HamburguesasComponent implements OnInit {
   private readonly menuService = inject(MenuService);
   public readonly cartService = inject(CartService);
 
-  readonly categorias = signal<MenuCategoria[]>([]);
+  readonly hamburguesas = signal<MenuItem[]>([]);
   readonly cargando = signal<boolean>(true);
   readonly error = signal<string>('');
 
   ngOnInit(): void {
-    this.menuService.getCategorias().subscribe({
-      next: (cats) => {
-        this.categorias.set(cats);
+    this.menuService.getHamburguesas().subscribe({
+      next: (items) => {
+        this.hamburguesas.set(items);
         this.cargando.set(false);
       },
       error: () => {
-        this.error.set('Error al cargar la carta. Por favor, recarga la página.');
+        this.error.set('Error al cargar las hamburguesas. Inténtalo de nuevo.');
         this.cargando.set(false);
       }
     });

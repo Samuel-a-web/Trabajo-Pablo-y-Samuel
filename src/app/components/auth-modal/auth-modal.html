@@ -2,57 +2,84 @@
 <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content auth-modal-content">
-      <div class="modal-header border-0 pb-0">
-        <h5 class="modal-title display-6 text-warning" id="authModalLabel">
-          <i class="bi bi-person-badge me-2"></i>
-          {{ isLoginMode() ? 'Iniciar Sesión' : 'Registrarse' }}
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      <!-- Cabecera -->
+      <div class="modal-header border-0 pb-0 auth-modal-header">
+        <div class="auth-modal-logo">🦀</div>
+        <div class="flex-grow-1 ms-3">
+          <h5 class="modal-title auth-modal-title" id="authModalLabel">
+            {{ modoLogin() ? 'Iniciar Sesión' : 'Crear Cuenta' }}
+          </h5>
+          <p class="auth-modal-subtitle mb-0">
+            {{ modoLogin() ? 'Bienvenido al Crustáceo Crujiente' : 'Únete a la tripulación' }}
+          </p>
+        </div>
+        <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      
-      <div class="modal-body p-4">
-        @if (errorMessage()) {
-          <div class="alert alert-danger py-2 border-0 bg-danger bg-opacity-25 text-white" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
-            {{ errorMessage() }}
+
+      <!-- Selector Login / Registro -->
+      <div class="auth-mode-tabs">
+        <button class="auth-tab" [class.active]="modoLogin()" (click)="modoLogin() || toggleModo()">
+          <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
+        </button>
+        <button class="auth-tab" [class.active]="!modoLogin()" (click)="!modoLogin() || toggleModo()">
+          <i class="bi bi-person-plus me-1"></i>Registrarse
+        </button>
+      </div>
+
+      <div class="modal-body p-4 pt-3">
+
+        <!-- Mensaje de error -->
+        @if (mensajeError()) {
+          <div class="auth-error-msg" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            {{ mensajeError() }}
           </div>
         }
 
         <form (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label for="username" class="form-label text-white-50">Usuario Submarino</label>
-            <div class="input-group auth-input-group">
-              <span class="input-group-text border-0 bg-transparent text-warning"><i class="bi bi-person-fill"></i></span>
-              <input type="text" class="form-control border-0 text-white" id="username" 
-                [ngModel]="username()" (ngModelChange)="username.set($event)" name="username" 
+          <!-- Campo usuario -->
+          <div class="auth-field-group mb-3">
+            <label for="username" class="auth-field-label">
+              <i class="bi bi-person-fill me-1"></i>Usuario Submarino
+            </label>
+            <div class="auth-input-wrapper">
+              <input type="text" class="auth-input" id="username"
+                [ngModel]="nombreUsuario()" (ngModelChange)="nombreUsuario.set($event)" name="username"
                 placeholder="Ej. BobEsponja" required autocomplete="username">
             </div>
           </div>
 
-          <div class="mb-4">
-            <label for="password" class="form-label text-white-50">Contraseña Secreta</label>
-            <div class="input-group auth-input-group">
-              <span class="input-group-text border-0 bg-transparent text-warning"><i class="bi bi-lock-fill"></i></span>
-              <input type="password" class="form-control border-0 text-white" id="password" 
-                [ngModel]="password()" (ngModelChange)="password.set($event)" name="password" 
+          <!-- Campo contraseña -->
+          <div class="auth-field-group mb-4">
+            <label for="password" class="auth-field-label">
+              <i class="bi bi-lock-fill me-1"></i>Contraseña Secreta
+            </label>
+            <div class="auth-input-wrapper">
+              <input type="password" class="auth-input" id="password"
+                [ngModel]="contrasena()" (ngModelChange)="contrasena.set($event)" name="password"
                 placeholder="FórmulaSecreta123" required autocomplete="current-password">
             </div>
           </div>
 
-          <button type="submit" class="btn btn-warning w-100 py-2 fw-bold fs-5 shadow-sm">
-            {{ isLoginMode() ? 'ENTRAR AL CRUSTÁCEO' : 'CREAR IDENTIFICACIÓN' }}
+          <!-- Botón submit -->
+          <button type="submit" class="auth-submit-btn w-100">
+            <i class="bi {{ modoLogin() ? 'bi-box-arrow-in-right' : 'bi-person-check' }} me-2"></i>
+            {{ modoLogin() ? 'ENTRAR AL CRUSTÁCEO' : 'CREAR IDENTIFICACIÓN' }}
           </button>
         </form>
 
-        <div class="text-center mt-4">
-          <p class="text-white-50 mb-0">
-            {{ isLoginMode() ? '¿No tienes identificación oficial?' : '¿Ya tienes una identificación?' }}
-          </p>
-          <button type="button" class="btn btn-link text-warning p-0 text-decoration-none fw-bold" (click)="toggleMode()">
-            {{ isLoginMode() ? 'Regístrate aquí' : 'Inicia sesión aquí' }}
+        <!-- Enlace cambio de modo -->
+        <div class="text-center mt-4 auth-toggle-area">
+          <span class="text-white-50">
+            {{ modoLogin() ? '¿Sin identificación oficial?' : '¿Ya tienes una identificación?' }}
+          </span>
+          <button type="button" class="auth-toggle-btn" (click)="toggleModo()">
+            {{ modoLogin() ? 'Regístrate aquí' : 'Inicia sesión aquí' }}
           </button>
         </div>
       </div>
+
     </div>
   </div>
 </div>

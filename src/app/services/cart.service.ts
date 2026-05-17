@@ -1,66 +1,66 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { Item, CartItem } from '../models/item';
+import { Item, ItemCarrito } from '../commons/item';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  // We use a Signal to hold the state
-  readonly cartItems = signal<CartItem[]>([]);
+  // Signal con el estado del carrito
+  readonly itemsCarrito = signal<ItemCarrito[]>([]);
 
-  // Computed signal for total number of items
-  readonly totalItemsCount = computed(() => {
-    return this.cartItems().reduce((total, item) => total + item.quantity, 0);
+  // Total de unidades en el carrito
+  readonly totalUnidades = computed(() => {
+    return this.itemsCarrito().reduce((total, item) => total + item.cantidad, 0);
   });
 
-  // Computed signal for the total price mathematically
-  readonly cartTotalNumber = computed(() => {
-    return this.cartItems().reduce((total, item) => {
-      return total + (this.parsePrice(item.precio) * item.quantity);
+  // Total precio numérico
+  readonly totalPrecioNumero = computed(() => {
+    return this.itemsCarrito().reduce((total, item) => {
+      return total + (this.parsearPrecio(item.precio) * item.cantidad);
     }, 0);
   });
 
-  // Computed signal to format the total back to currency
-  readonly cartTotalFormatted = computed(() => {
-    return this.cartTotalNumber().toFixed(2).replace('.', ',') + ' €';
+  // Total precio formateado
+  readonly totalPrecioFormateado = computed(() => {
+    return this.totalPrecioNumero().toFixed(2).replace('.', ',') + ' €';
   });
 
-  // Add an item to the cart, or increment quantity if it exists
+  // Añadir item al carrito o incrementar cantidad
   addToCart(item: Item): void {
-    this.cartItems.update(items => {
-      const existing = items.find(i => i.id === item.id);
-      if (existing) {
-        return items.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i);
+    this.itemsCarrito.update(items => {
+      const existente = items.find(i => i.id === item.id);
+      if (existente) {
+        return items.map(i => i.id === item.id ? { ...i, cantidad: i.cantidad + 1 } : i);
       }
-      return [...items, { ...item, quantity: 1 }];
+      return [...items, { ...item, cantidad: 1 }];
     });
   }
 
-  // Remove an item entirely or decrease quantity
-  removeFromCart(itemId: string, completely: boolean = false): void {
-    this.cartItems.update(items => {
-      if (completely) {
+  // Quitar item o decrementar cantidad
+  removeFromCart(itemId: string, completamente: boolean = false): void {
+    this.itemsCarrito.update(items => {
+      if (completamente) {
         return items.filter(i => i.id !== itemId);
       }
-      
-      const existing = items.find(i => i.id === itemId);
-      if (existing && existing.quantity > 1) {
-        return items.map(i => i.id === itemId ? { ...i, quantity: i.quantity - 1 } : i);
+
+      const existente = items.find(i => i.id === itemId);
+      if (existente && existente.cantidad > 1) {
+        return items.map(i => i.id === itemId ? { ...i, cantidad: i.cantidad - 1 } : i);
       }
-      
+
       return items.filter(i => i.id !== itemId);
     });
   }
 
-  clearCart(): void {
-    this.cartItems.set([]);
+  vaciarCarrito(): void {
+    this.itemsCarrito.set([]);
   }
 
-  // Parses '7,90 €' into 7.90
-  private parsePrice(precio: string): number {
+  // Parsea '7,90 €' a 7.90
+  private parsearPrecio(precio: string): number {
     if (!precio) return 0;
-    const cleanStr = precio.replace('€', '').replace(',', '.').trim();
-    const num = parseFloat(cleanStr);
+    const limpio = precio.replace('€', '').replace(',', '.').trim();
+    const num = parseFloat(limpio);
     return isNaN(num) ? 0 : num;
   }
 }

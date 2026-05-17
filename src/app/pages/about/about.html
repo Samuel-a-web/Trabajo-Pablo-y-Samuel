@@ -19,15 +19,15 @@
           <h3 class="about-schedule-title mb-3">
             <i class="bi bi-calendar-week me-2"></i>HORARIO
           </h3>
-          <div data-section="schedule">
+          <div data-section="horario">
             <ul class="list-unstyled text-white mb-0 text-start schedule-list">
-              @for (item of schedule; track item.day) {
+              @for (item of horario; track item.dia) {
                 <li class="mb-2 d-flex justify-content-between align-items-center"
                   data-bs-toggle="tooltip" data-bs-placement="top"
                   [attr.data-bs-title]="item.tooltip">
-                  <strong>{{ item.day }}:</strong>
+                  <strong>{{ item.dia }}:</strong>
                   <span class="badge bg-dark bg-opacity-50 px-3 py-2">
-                    <i class="bi bi-clock me-1"></i>{{ item.hours }}
+                    <i class="bi bi-clock me-1"></i>{{ item.horas }}
                   </span>
                 </li>
               }
@@ -45,17 +45,17 @@
         <p class="text-white-50">Haz click en cada personaje para conocerlo mejor</p>
       </div>
 
-      @for (member of crew; track member.id) {
+      @for (miembro of equipo; track miembro.id) {
         <div class="col-md-4 mb-4">
           <div class="card crew-card h-100" role="button"
-            data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + member.id"
+            data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + miembro.id"
             tabindex="0">
             <div class="d-flex align-items-center justify-content-center p-3 crew-emoji">
-              {{ member.emoji }}
+              {{ miembro.emoji }}
             </div>
             <div class="card-body text-start">
-              <h3 class="text-warning crew-name">{{ member.name }}</h3>
-              <p class="text-white-50 mb-1">{{ member.description }}</p>
+              <h3 class="text-warning crew-name">{{ miembro.nombre }}</h3>
+              <p class="text-white-50 mb-1">{{ miembro.descripcion }}</p>
               <small class="text-muted d-block mt-2">
                 <i class="bi bi-hand-index me-1"></i>Click para más detalles
               </small>
@@ -67,28 +67,28 @@
   </div>
 </section>
 
-<!-- Modales Bootstrap para cada miembro de la tripulación -->
-@for (member of crew; track member.id) {
-  <div class="modal fade" [id]="'modal-' + member.id" tabindex="-1"
-    [attr.aria-labelledby]="'modalLabel-' + member.id" aria-hidden="true">
+<!-- Modales Bootstrap para cada miembro del equipo -->
+@for (miembro of equipo; track miembro.id) {
+  <div class="modal fade" [id]="'modal-' + miembro.id" tabindex="-1"
+    [attr.aria-labelledby]="'modalLabel-' + miembro.id" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content crew-modal-content">
         <div class="modal-header border-0">
-          <h4 class="modal-title text-warning" [id]="'modalLabel-' + member.id">
-            {{ member.emoji }} {{ member.name }}
+          <h4 class="modal-title text-warning" [id]="'modalLabel-' + miembro.id">
+            {{ miembro.emoji }} {{ miembro.nombre }}
           </h4>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
             aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
           <div class="text-center mb-3">
-            <span class="display-1">{{ member.emoji }}</span>
+            <span class="display-1">{{ miembro.emoji }}</span>
           </div>
           <h5 class="text-warning mb-2">
-            <i class="bi bi-briefcase me-1"></i>{{ member.role }}
+            <i class="bi bi-briefcase me-1"></i>{{ miembro.rol }}
           </h5>
-          <p class="text-white-50">{{ member.description }}</p>
-          <p class="text-white-50 mb-0">{{ member.funFact }}</p>
+          <p class="text-white-50">{{ miembro.descripcion }}</p>
+          <p class="text-white-50 mb-0">{{ miembro.curiosidad }}</p>
         </div>
         <div class="modal-footer border-0">
           <button type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal">

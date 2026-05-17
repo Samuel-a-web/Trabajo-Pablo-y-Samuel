@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart.service';
@@ -11,22 +11,30 @@ import { CartService } from '../../services/cart.service';
   templateUrl: './order.html',
 })
 export class OrderPageComponent {
+  private readonly platformId = inject(PLATFORM_ID);
   public cartService = inject(CartService);
-  orderConfirmed = false;
+  pedidoConfirmado = false;
 
   formData = {
-    name: '',
-    phone: '',
-    address: '',
-    notes: ''
+    nombre: '',
+    telefono: '',
+    direccion: '',
+    notas: ''
   };
 
-  confirmOrder() {
-    if (this.formData.name && this.formData.phone && this.formData.address && this.cartService.totalItemsCount() > 0) {
-      this.orderConfirmed = true;
-      this.cartService.clearCart();
-      // Scroll to top to see the success message
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  confirmarPedido() {
+    if (
+      this.formData.nombre &&
+      this.formData.telefono &&
+      this.formData.direccion &&
+      this.cartService.totalUnidades() > 0
+    ) {
+      this.pedidoConfirmado = true;
+      this.cartService.vaciarCarrito();
+      
+      if (isPlatformBrowser(this.platformId)) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   }
 }

@@ -1,137 +1,32 @@
-import { Injectable } from '@angular/core';
-import { MenuCategory } from '../models/menu.models';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { MenuCategoria, MenuItem } from '../commons/menu.interface';
+
+interface MenuJsonResponse {
+  categorias: MenuCategoria[];
+}
 
 @Injectable({ providedIn: 'root' })
 export class MenuService {
-  private readonly categories: readonly MenuCategory[] = [
-    {
-      id: 'cangreburgers',
-      title: 'Cangreburgers',
-      icon: '🍔',
-      items: [
-        {
-          id: 'burger-classic',
-          name: 'Cangreburger Clásica',
-          description: 'Pan suave con carne, lechuga, queso y la salsa secreta de la casa.',
-          price: '7,90 €',
-        },
-        {
-          id: 'burger-double',
-          name: 'Doble Cangreburger',
-          description: 'Doble medallón y salsa extra para el apetito de verdad.',
-          price: '10,50 €',
-        },
-        {
-          id: 'burger-spicy',
-          name: 'Cangreburger Picante',
-          description: 'Toque marinero ahumado con chilli y pepinillo en vinagre.',
-          price: '8,90 €',
-        },
-        {
-          id: 'burger-veggie',
-          name: 'Cangreburger Veggie de Algas',
-          description: 'Medallón vegetal cremoso de algas sobre pan con semillas tostadas.',
-          price: '8,20 €',
-        },
-      ],
-    },
-    {
-      id: 'entrantes',
-      title: 'Entrantes',
-      icon: '🥨',
-      items: [
-        {
-          id: 'side-onion-rings',
-          name: 'Aros de cebolla marina',
-          description: 'Crujientes por fuera y suaves dentro, ideal para picar antes de pedir burger.',
-          price: '4,50 €',
-        },
-        {
-          id: 'side-coral-fries',
-          name: 'Papas de coral',
-          description: 'Clásica fritura marina con salsa de cheddar suave opcional.',
-          price: '3,90 €',
-        },
-        {
-          id: 'side-wings',
-          name: 'Alitas del océano',
-          description: 'Adobadas dulces y picantes servidas muy calientes para compartir.',
-          price: '6,20 €',
-        },
-        {
-          id: 'side-nachos',
-          name: 'Nachos Bikini con queso',
-          description: 'Triángulos crujientes con queso derretido, jalapeño y un toque fresco.',
-          price: '5,80 €',
-        },
-      ],
-    },
-    {
-      id: 'bebidas',
-      title: 'Bebidas',
-      icon: '🥤',
-      items: [
-        {
-          id: 'drink-soda',
-          name: 'Refresco submarino',
-          description: 'Con gas bien frío, perfecto junto al menú rápido del Crustáceo.',
-          price: '2,20 €',
-        },
-        {
-          id: 'drink-lemonade',
-          name: 'Limonada de medusa',
-          description: 'Cítrica, ligera y con hielo, ideal cuando hace bochorno en Bikini Bottom.',
-          price: '2,80 €',
-        },
-        {
-          id: 'drink-seaweed-shake',
-          name: 'Batido de algas',
-          description: 'Crema irresistible vainilla-menta, perfecto para terminar después de burger.',
-          price: '3,50 €',
-        },
-        {
-          id: 'drink-water',
-          name: 'Agua mineral',
-          description: 'Botella grande fría sin gas ni complicaciones para acompañar la comida.',
-          price: '1,80 €',
-        },
-      ],
-    },
-    {
-      id: 'postres',
-      title: 'Postres',
-      icon: '🍰',
-      items: [
-        {
-          id: 'dessert-pineapple-cake',
-          name: 'Tarta de piña',
-          description: 'Base crujiente, crema fresca de limón-piña lista para golosos tropicales.',
-          price: '4,20 €',
-        },
-        {
-          id: 'dessert-coral-ice-cream',
-          name: 'Helado de coral',
-          description: 'Tres bolas pastel de fresa-mar y virutas caramelizadas muy suaves.',
-          price: '3,80 €',
-        },
-        {
-          id: 'dessert-brownie',
-          name: 'Brownie del fondo marino',
-          description: 'Chocolate intenso, caliente dentro y un toque de sal marina opcional.',
-          price: '4,60 €',
-        },
-        {
-          id: 'dessert-cookie',
-          name: 'Cookie de krabby chips',
-          description: 'Galleta dorada enorme recién horneada para terminar muy redondo.',
-          price: '3,20 €',
-        },
-      ],
-    },
-  ];
+  private readonly http = inject(HttpClient);
+  private readonly JSON_URL = '/assets/menu.json';
 
-  getCategories(): readonly MenuCategory[] {
-    return this.categories;
+  getCategorias(): Observable<MenuCategoria[]> {
+    return this.http
+      .get<MenuJsonResponse>(this.JSON_URL)
+      .pipe(map(data => data.categorias));
+  }
+
+  getCategoriaPorId(id: string): Observable<MenuCategoria | undefined> {
+    return this.getCategorias().pipe(
+      map(cats => cats.find(c => c.id === id))
+    );
+  }
+
+  getHamburguesas(): Observable<MenuItem[]> {
+    return this.getCategoriaPorId('cangreburgers').pipe(
+      map(cat => cat ? [...cat.items] : [])
+    );
   }
 }
-

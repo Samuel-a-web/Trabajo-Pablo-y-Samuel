@@ -1,0 +1,66 @@
+<section id="hamburguesas" class="hamburguesas-page py-5">
+  <div class="container">
+
+    <!-- Cabecera -->
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <div class="menu-intro">
+          <h2 class="text-warning mb-2">🍔 CANGREBURGERS</h2>
+          <div class="menu-divider"></div>
+          <p class="text-white-50 mb-0 mt-3">
+            Las legendarias hamburguesas del Crustáceo Crujiente, preparadas con la fórmula secreta.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado: cargando -->
+    @if (cargando()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-warning" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="text-white-50 mt-3">Preparando las Cangreburgers...</p>
+      </div>
+    }
+
+    <!-- Estado: error -->
+    @if (error()) {
+      <div class="alert alert-danger text-center border-0 bg-danger bg-opacity-25 text-white" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
+        {{ error() }}
+      </div>
+    }
+
+    <!-- Grid de hamburguesas -->
+    @if (!cargando() && !error()) {
+      <div class="row g-4">
+        @for (burger of hamburguesas(); track burger.id) {
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="burger-card h-100">
+              <!-- Icono / emoji -->
+              <div class="burger-card-icon">🍔</div>
+
+              <div class="burger-card-body">
+                <h3 class="burger-card-nombre">{{ burger.nombre }}</h3>
+                <p class="burger-card-descripcion">{{ burger.descripcion }}</p>
+              </div>
+
+              <div class="burger-card-footer">
+                <span class="burger-card-precio">{{ burger.precio }}</span>
+                <button
+                  class="btn btn-sm btn-outline-warning rounded-pill burger-add-btn"
+                  (click)="cartService.addToCart(burger)"
+                  title="Añadir al ticket"
+                >
+                  <i class="bi bi-plus-lg me-1"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</section>

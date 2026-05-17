@@ -10,51 +10,71 @@
       </div>
     </div>
 
-    <!-- Bootstrap Accordion -->
-    <div class="accordion" id="menuAccordion">
-      @for (category of categories; track category.id; let i = $index) {
-        <div class="accordion-item">
-          <h3 class="accordion-header" [id]="'heading-' + category.id">
-            <button class="accordion-button" [class.collapsed]="i !== 0" type="button"
-              [attr.data-bs-toggle]="'collapse'"
-              [attr.data-bs-target]="'#collapse-' + category.id"
-              [attr.aria-expanded]="i === 0"
-              [attr.aria-controls]="'collapse-' + category.id">
-              <span class="menu-card-icon me-3" aria-hidden="true">{{ category.icon }}</span>
-              <span class="accordion-title-text">{{ category.title }}</span>
-              <span class="badge bg-danger ms-auto me-3">{{ category.items.length }} items</span>
-            </button>
-          </h3>
-          <div [id]="'collapse-' + category.id" class="accordion-collapse collapse"
-            [class.show]="i === 0"
-            [attr.aria-labelledby]="'heading-' + category.id"
-            data-bs-parent="#menuAccordion">
-            <div class="accordion-body">
-              <ul class="list-unstyled menu-list mb-0">
-                @for (item of category.items; track item.id) {
-                  <li class="menu-item">
-                    <div class="menu-item-inner">
-                      <div class="flex-grow-1">
-                        <span class="menu-item-name">{{ item.nombre }}</span>
-                        <small class="menu-item-desc">{{ item.descripcion }}</small>
+    <!-- Estado: cargando -->
+    @if (cargando()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-warning" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="text-white-50 mt-3">Preparando la carta...</p>
+      </div>
+    }
+
+    <!-- Estado: error -->
+    @if (error()) {
+      <div class="alert alert-danger text-center border-0 bg-danger bg-opacity-25 text-white" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
+        {{ error() }}
+      </div>
+    }
+
+    <!-- Accordion de categorías -->
+    @if (!cargando() && !error()) {
+      <div class="accordion" id="menuAccordion">
+        @for (categoria of categorias(); track categoria.id; let i = $index) {
+          <div class="accordion-item">
+            <h3 class="accordion-header" [id]="'heading-' + categoria.id">
+              <button class="accordion-button" [class.collapsed]="i !== 0" type="button"
+                [attr.data-bs-toggle]="'collapse'"
+                [attr.data-bs-target]="'#collapse-' + categoria.id"
+                [attr.aria-expanded]="i === 0"
+                [attr.aria-controls]="'collapse-' + categoria.id">
+                <span class="menu-card-icon me-3" aria-hidden="true">{{ categoria.icono }}</span>
+                <span class="accordion-title-text">{{ categoria.titulo }}</span>
+                <span class="badge bg-danger ms-auto me-3">{{ categoria.items.length }} items</span>
+              </button>
+            </h3>
+            <div [id]="'collapse-' + categoria.id" class="accordion-collapse collapse"
+              [class.show]="i === 0"
+              [attr.aria-labelledby]="'heading-' + categoria.id"
+              data-bs-parent="#menuAccordion">
+              <div class="accordion-body">
+                <ul class="list-unstyled menu-list mb-0">
+                  @for (item of categoria.items; track item.id) {
+                    <li class="menu-item">
+                      <div class="menu-item-inner">
+                        <div class="flex-grow-1">
+                          <span class="menu-item-name">{{ item.nombre }}</span>
+                          <small class="menu-item-desc">{{ item.descripcion }}</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                          <span class="menu-item-price mb-0">{{ item.precio }}</span>
+                          <button class="btn btn-sm btn-outline-warning rounded-circle ms-4 shadow-sm"
+                                  style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
+                                  (click)="cartService.addToCart(item)"
+                                  title="Añadir al ticket">
+                            <i class="bi bi-plus-lg"></i>
+                          </button>
+                        </div>
                       </div>
-                      <div class="d-flex align-items-center">
-                        <span class="menu-item-price mb-0">{{ item.precio }}</span>
-                        <button class="btn btn-sm btn-outline-warning rounded-circle ms-4 shadow-sm" 
-                                style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
-                                (click)="cartService.addToCart(item)" 
-                                title="Añadir al ticket">
-                          <i class="bi bi-plus-lg"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-                }
-              </ul>
+                    </li>
+                  }
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      }
-    </div>
+        }
+      </div>
+    }
   </div>
 </section>

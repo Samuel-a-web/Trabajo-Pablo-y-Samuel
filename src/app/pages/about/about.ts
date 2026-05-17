@@ -9,8 +9,8 @@ import { RestaurantService } from '../../services/restaurant.service';
 export class AboutPageComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly restaurantService = inject(RestaurantService);
-  readonly crew = this.restaurantService.getCrew();
-  readonly schedule = this.restaurantService.getSchedule();
+  readonly equipo = this.restaurantService.getEquipo();
+  readonly horario = this.restaurantService.getHorario();
 
   constructor() {
     afterNextRender(() => {

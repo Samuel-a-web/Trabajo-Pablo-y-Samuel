@@ -15,10 +15,10 @@ export class AuthModalComponent {
 
   private modalInstance: any = null;
 
-  isLoginMode = signal<boolean>(true);
-  username = signal<string>('');
-  password = signal<string>('');
-  errorMessage = signal<string>('');
+  modoLogin = signal<boolean>(true);
+  nombreUsuario = signal<string>('');
+  contrasena = signal<string>('');
+  mensajeError = signal<string>('');
 
   constructor() {
     afterNextRender(() => {
@@ -31,8 +31,7 @@ export class AuthModalComponent {
     const el = document.getElementById('authModal');
     if (el && typeof (window as any).bootstrap !== 'undefined') {
       this.modalInstance = (window as any).bootstrap.Modal.getOrCreateInstance(el);
-      
-      // Clear form when modal is closed
+
       el.addEventListener('hidden.bs.modal', () => {
         this.resetForm();
       });
@@ -51,41 +50,41 @@ export class AuthModalComponent {
     }
   }
 
-  toggleMode(): void {
-    this.isLoginMode.update(v => !v);
-    this.errorMessage.set('');
+  toggleModo(): void {
+    this.modoLogin.update(v => !v);
+    this.mensajeError.set('');
   }
 
   private resetForm(): void {
-    this.username.set('');
-    this.password.set('');
-    this.errorMessage.set('');
-    this.isLoginMode.set(true);
+    this.nombreUsuario.set('');
+    this.contrasena.set('');
+    this.mensajeError.set('');
+    this.modoLogin.set(true);
   }
 
   onSubmit(): void {
-    if (!this.username().trim() || !this.password().trim()) {
-      this.errorMessage.set('Por favor, rellena todos los campos');
+    if (!this.nombreUsuario().trim() || !this.contrasena().trim()) {
+      this.mensajeError.set('Por favor, rellena todos los campos');
       return;
     }
 
-    const credentials = {
-      username: this.username().trim(),
-      password: this.password()
+    const credenciales = {
+      nombreUsuario: this.nombreUsuario().trim(),
+      contrasena: this.contrasena()
     };
 
-    let result;
-    if (this.isLoginMode()) {
-      result = this.authService.login(credentials);
+    let resultado;
+    if (this.modoLogin()) {
+      resultado = this.authService.login(credenciales);
     } else {
-      result = this.authService.register(credentials);
+      resultado = this.authService.registrar(credenciales);
     }
 
-    if (result.success) {
+    if (resultado.exito) {
       this.hide();
       this.resetForm();
     } else {
-      this.errorMessage.set(result.error || 'Ocurrió un error inesperado');
+      this.mensajeError.set(resultado.error || 'Ocurrió un error inesperado');
     }
   }
 }
