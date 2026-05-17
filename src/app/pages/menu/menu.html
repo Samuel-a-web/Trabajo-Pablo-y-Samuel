@@ -11,17 +11,60 @@
         </div>
       </div>
     </div>
-    @for (category of menuService.categories(); track category.id) {
-      <div class="menu-category mb-5">
-        <h3 class="text-warning mb-4"><span class="me-2">{{ category.icon }}</span>{{ category.title }}</h3>
-        <div class="row g-4">
-          @for (item of category.items; track item.id) {
-            <div class="col-md-6 col-lg-3">
-              <app-menu-item-card [item]="item"></app-menu-item-card>
-            </div>
-          }
+
+    <!-- Estado de carga -->
+    @if (menuService.isLoading()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-warning" role="status">
+          <span class="visually-hidden">Cargando menú...</span>
         </div>
+        <p class="text-white-50 mt-3">Cargando la carta...</p>
       </div>
+    } @else {
+
+      <!-- Acordeón de categorías -->
+      <div class="accordion" id="menuAccordion">
+        @for (category of menuService.categories(); track category.id; let i = $index) {
+          <div class="accordion-item">
+
+            <!-- Cabecera de categoría -->
+            <h3 class="accordion-header" [id]="'heading-' + category.id">
+              <button
+                class="accordion-button"
+                [class.collapsed]="i !== 0"
+                type="button"
+                [attr.data-bs-toggle]="'collapse'"
+                [attr.data-bs-target]="'#collapse-' + category.id"
+                [attr.aria-expanded]="i === 0"
+                [attr.aria-controls]="'collapse-' + category.id"
+              >
+                <span class="menu-card-icon me-3" aria-hidden="true">{{ category.icon }}</span>
+                <span class="accordion-title-text">{{ category.title }}</span>
+                <span class="badge bg-danger ms-auto me-3">{{ category.items.length }} items</span>
+              </button>
+            </h3>
+
+            <!-- Cuerpo de categoría: grid de tarjetas -->
+            <div
+              [id]="'collapse-' + category.id"
+              class="accordion-collapse collapse"
+              [class.show]="i === 0"
+              [attr.aria-labelledby]="'heading-' + category.id"
+              data-bs-parent="#menuAccordion"
+            >
+              <div class="accordion-body pt-3">
+                <div class="menu-items-grid">
+                  @for (item of category.items; track item.id) {
+                    <app-menu-item-card [item]="item" />
+                  }
+                </div>
+              </div>
+            </div>
+
+          </div>
+        }
+      </div>
+
     }
   </div>
 </section>
