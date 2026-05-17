@@ -10,11 +10,6 @@ export class AboutPageComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly restaurantService = inject(RestaurantService);
 
-  // Signals reactivos: se actualizan cuando el JSON carga
-  readonly crew = this.restaurantService.crew;
-  readonly schedule = this.restaurantService.schedule;
-  readonly isLoading = this.restaurantService.isLoading;
-
   constructor() {
     afterNextRender(() => {
       // Espera a que los datos del JSON carguen antes de inicializar los tooltips

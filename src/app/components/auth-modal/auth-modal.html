@@ -3,84 +3,16 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content auth-modal-content">
 
-      <!-- Header limpio con logo/icono -->
-      <div class="auth-modal-header">
-        <div class="auth-logo-circle" aria-hidden="true">
-          <i class="bi bi-person-badge-fill"></i>
-        </div>
-        <h5 class="auth-modal-title" id="authModalLabel">
-          {{ isLoginMode() ? 'Iniciar Sesión' : 'Crear Cuenta' }}
-        </h5>
-        <p class="auth-modal-subtitle">
-          {{ isLoginMode() ? 'Accede al Crustáceo Crujiente' : 'Únete a la tripulación del Crustáceo' }}
-        </p>
-        <button type="button" class="auth-close-btn" data-bs-dismiss="modal" aria-label="Cerrar">
-          <i class="bi bi-x-lg"></i>
-        </button>
-      </div>
-
-      <div class="auth-modal-body">
-
-        <!-- Mensaje de error -->
-        @if (errorMessage()) {
-          <div class="auth-error-msg" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            {{ errorMessage() }}
           </div>
         }
 
         <!-- Formulario -->
         <form (ngSubmit)="onSubmit()">
-          <div class="auth-field">
-            <label for="username" class="auth-label">
-              <i class="bi bi-person-fill me-1"></i>Usuario
-            </label>
-            <input
-              type="text"
-              class="auth-input"
-              id="username"
-              [ngModel]="username()"
-              (ngModelChange)="username.set($event)"
-              name="username"
-              placeholder="Ej. BobEsponja"
-              required
-              autocomplete="username"
-            >
-          </div>
-
-          <div class="auth-field">
-            <label for="password" class="auth-label">
-              <i class="bi bi-lock-fill me-1"></i>Contraseña
-            </label>
-            <input
-              type="password"
-              class="auth-input"
-              id="password"
-              [ngModel]="password()"
-              (ngModelChange)="password.set($event)"
-              name="password"
-              placeholder="FórmulaSecreta123"
-              required
-              autocomplete="current-password"
-            >
-          </div>
-
-          <button type="submit" class="auth-submit-btn">
-            {{ isLoginMode() ? '🦀 Entrar al Crustáceo' : '✅ Crear Identificación' }}
-          </button>
-        </form>
-
-        <!-- Cambiar modo -->
-        <div class="auth-toggle">
-          <span class="auth-toggle-text">
-            {{ isLoginMode() ? '¿Sin cuenta aún?' : '¿Ya tienes cuenta?' }}
-          </span>
-          <button type="button" class="auth-toggle-btn" (click)="toggleMode()">
-            {{ isLoginMode() ? 'Regístrate aquí' : 'Inicia sesión' }}
           </button>
         </div>
 
       </div>
+
     </div>
   </div>
 </div>
